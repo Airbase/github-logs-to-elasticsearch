@@ -16,7 +16,7 @@ def get_workflow_logs(github_token, repo, run_id):
 def push_to_elasticsearch(elasticsearch_url, index, logs, api_key_id, api_key):
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'ApiKey {api_key_id}:{api_key}'
+        'Authorization': f'ApiKey {base64.b64encode(f"{api_key_id}:{api_key}".encode()).decode()}'
     }
     # Encode logs to handle any non-UTF-8 content
     encoded_logs = base64.b64encode(logs).decode('ascii')
