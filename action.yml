@@ -1,0 +1,21 @@
+name: 'Push Logs to Elasticsearch'
+description: 'A GitHub Action to push workflow logs to Elasticsearch'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+inputs:
+  elasticsearch_url:
+    description: 'Elasticsearch URL'
+    required: true
+  elasticsearch_index:
+    description: 'Elasticsearch index name'
+    required: true
+  elasticsearch_api_key_id:
+    description: 'Elasticsearch API Key ID'
+    required: true
+  elasticsearch_api_key:
+    description: 'Elasticsearch API Key'
+    required: true
+  github_token:
+    description: 'GitHub token'
+    required: true
