@@ -36,13 +36,19 @@ def push_to_elasticsearch(elasticsearch_url, index, logs, api_key_id, api_key):
     return response.json()
 
 if __name__ == "__main__":
-    elasticsearch_url = os.getenv('INPUT_ELASTICSEARCH_URL')
-    elasticsearch_index = os.getenv('INPUT_ELASTICSEARCH_INDEX')
-    elasticsearch_api_key_id = os.getenv('INPUT_ELASTICSEARCH_API_KEY_ID')
-    elasticsearch_api_key = os.getenv('INPUT_ELASTICSEARCH_API_KEY')
-    github_token = os.getenv('INPUT_GITHUB_TOKEN')
+    elasticsearch_url = os.getenv('ELASTICSEARCH_URL')
+    elasticsearch_index = os.getenv('ELASTICSEARCH_INDEX')
+    elasticsearch_api_key_id = os.getenv('ELASTICSEARCH_API_KEY_ID')
+    elasticsearch_api_key = os.getenv('ELASTICSEARCH_API_KEY')
+    github_token = os.getenv('GITHUB_TOKEN')
     github_repository = os.getenv('GITHUB_REPOSITORY')
     github_run_id = os.getenv('GITHUB_RUN_ID')
+    github_pr_number = os.getenv('GITHUB_PR_NUMBER')
+
+    print(f"Elasticsearch URL: {elasticsearch_url}")
+    print(f"Elasticsearch Index: {elasticsearch_index}")
+    print(f"GitHub Repository: {github_repository}")
+    print(f"GitHub Run ID: {github_run_id}")
 
     try:
         logs = get_workflow_logs(github_token, github_repository, github_run_id)
