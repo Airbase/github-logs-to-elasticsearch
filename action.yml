@@ -4,18 +4,27 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
 inputs:
-  elasticsearch_url:
+  ELASTICSEARCH_URL:
     description: 'Elasticsearch URL'
     required: true
-  elasticsearch_index:
+  ELASTICSEARCH_INDEX:
     description: 'Elasticsearch index name'
     required: true
-  elasticsearch_api_key_id:
+  ELASTICSEARCH_API_KEY_ID:
     description: 'Elasticsearch API Key ID'
     required: true
-  elasticsearch_api_key:
+  ELASTICSEARCH_API_KEY:
     description: 'Elasticsearch API Key'
     required: true
-  github_token:
+  GITHUB_TOKEN:
     description: 'GitHub token'
+    required: true
+  GITHUB_REPOSITORY:
+    description: 'GitHub repository'
+    required: true
+  GITHUB_RUN_ID:
+    description: 'GitHub run ID'
+    required: true
+  GITHUB_PR_NUMBER:
+    description: 'GitHub PR number'
     required: true
