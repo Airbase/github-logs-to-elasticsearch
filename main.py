@@ -1,7 +1,6 @@
 import os
 import requests
 import json
-import base64
 
 def get_workflow_logs(github_token, repo, run_id):
     headers = {
@@ -18,10 +17,10 @@ def push_to_elasticsearch(elasticsearch_url, index, logs, api_key_id, api_key):
         'Content-Type': 'application/json',
         'Authorization': f'ApiKey {base64.b64encode(f"{api_key_id}:{api_key}".encode()).decode()}'
     }
-    # Encode logs to handle any non-UTF-8 content
-    encoded_logs = base64.b64encode(logs).decode('ascii')
+    # Decode logs from Base64 to plain text
+    decoded_logs = logs.decode('utf-8', errors='ignore')
     data = {
-        "logs": encoded_logs
+        "logs": decoded_logs
     }
     response = requests.post(f'{elasticsearch_url}/{index}/_doc', headers=headers, data=json.dumps(data))
     response.raise_for_status()
