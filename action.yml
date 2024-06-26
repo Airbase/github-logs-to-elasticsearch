@@ -3,6 +3,16 @@ description: 'A GitHub Action to push workflow logs to Elasticsearch'
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.ELASTICSEARCH_URL }}
+    - ${{ inputs.ELASTICSEARCH_INDEX }}
+    - ${{ inputs.ELASTICSEARCH_API_KEY_ID }}
+    - ${{ inputs.ELASTICSEARCH_API_KEY }}
+    - ${{ inputs.GITHUB_TOKEN }}
+    - ${{ inputs.GITHUB_REPOSITORY }}
+    - ${{ inputs.GITHUB_RUN_ID }}
+    - ${{ inputs.GITHUB_PR_NUMBER }}
+    - ${{ inputs.GITHUB_PR_TITLE }}
 inputs:
   ELASTICSEARCH_URL:
     description: 'Elasticsearch URL'
