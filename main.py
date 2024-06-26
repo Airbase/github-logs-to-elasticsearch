@@ -2,6 +2,8 @@ import os
 import requests
 import json
 import base64
+import zipfile
+import io
 
 def get_workflow_logs(github_token, repo, run_id):
     headers = {
@@ -13,15 +15,21 @@ def get_workflow_logs(github_token, repo, run_id):
     response.raise_for_status()
     return response.content
 
+def extract_logs(logs):
+    log_text = ""
+    with zipfile.ZipFile(io.BytesIO(logs)) as z:
+        for log_file in z.namelist():
+            with z.open(log_file) as f:
+                log_text += f.read().decode('utf-8', errors='ignore') + "\n"
+    return log_text
+
 def push_to_elasticsearch(elasticsearch_url, index, logs, api_key_id, api_key):
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'ApiKey {base64.b64encode(f"{api_key_id}:{api_key}".encode()).decode()}'
     }
-    # Decode logs from bytes to plain text
-    decoded_logs = logs.decode('utf-8', errors='ignore')
     data = {
-        "logs": decoded_logs
+        "logs": logs
     }
     response = requests.post(f'{elasticsearch_url}/{index}/_doc', headers=headers, data=json.dumps(data))
     response.raise_for_status()
@@ -38,7 +46,8 @@ if __name__ == "__main__":
 
     try:
         logs = get_workflow_logs(github_token, github_repository, github_run_id)
-        response = push_to_elasticsearch(elasticsearch_url, elasticsearch_index, logs, elasticsearch_api_key_id, elasticsearch_api_key)
+        logs_text = extract_logs(logs)
+        response = push_to_elasticsearch(elasticsearch_url, elasticsearch_index, logs_text, elasticsearch_api_key_id, elasticsearch_api_key)
         print(f'Successfully pushed logs to Elasticsearch: {response}')
     except Exception as e:
         print(f'Error: {e}')
